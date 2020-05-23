@@ -1,26 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      countries: []
+    }
+
+  }
+  componentDidMount() {
+    fetch("http://localhost:3001/api/v1/countries")
+    .then((response) => {
+      return response.json()
+    })
+    .then((countries) => {
+      this.setState({
+        countries: countries
+      })
+    })
+  }
+  render() {
+    const countryList = this.state.countries.map((country, i) => {
+      return<li key={i}>{country.name}</li>
+    })
+    return(
+      <div className="App">
+        <h1>Countries list</h1>
+        <ul>
+          {countryList}
+        </ul>
+
+      </div>
+    );
+  }
 }
 
 export default App;
